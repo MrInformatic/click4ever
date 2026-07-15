@@ -68,11 +68,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut mouse = Mouse::new();
     mouse.hook(Box::new(move |event| {
         let mut state = state.lock().unwrap();
+
         match event {
             MouseEvent::Press(button) => {
                 state.set_button(*button);
             }
-            MouseEvent::AbsoluteMove(_, _) if state.stop_it() => {
+            MouseEvent::RelativeMove(_, _) | MouseEvent::AbsoluteMove(_, _) if state.stop_it() => {
+                println!("Move");
                 exit(0);
             }
             _ => {}
